@@ -224,6 +224,9 @@ Resources:
               yum upgrade -y
               yum install libXext libSM libXrender mesa-libGL.x86_64 git -y
               yum groupinstall 'Development Tools' -y 
+              wget https://www.rarlab.com/rar/rarlinux-x64-6.0.2.tar.gz
+              tar -zxvf rarlinux-x64-5.5.0.tar.gz
+              cd rar/ && cp -v rar unrar /usr/bin/ && cd ..
               echo "cloning repository  from https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git ...."
               git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
               echo "cloning done"
@@ -257,9 +260,6 @@ Resources:
             type: String
             description: "(Required) The instance ID you want to run commands on."
             default: !Ref EC2Instance
-        CloudWatchOutputConfig:
-          CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
-          CloudWatchOutputEnabled: true
         mainSteps:
         - name: processImages
           action: 'aws:runCommand'
@@ -268,6 +268,9 @@ Resources:
             Parameters:
               commands:
               - "{{ commands }}"
+            CloudWatchOutputConfig:
+              CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+              CloudWatchOutputEnabled: true
             InstanceIds:
               - "{{ InstanceId }}"
       DocumentFormat: YAML

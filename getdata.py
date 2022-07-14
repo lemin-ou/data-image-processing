@@ -1,6 +1,6 @@
 import boto3
-from os import getenv
-import patoolib
+from os import getenv, path
+from rarfile import RarFile
 
 
 def get_service(service, region_name):
@@ -26,12 +26,16 @@ def get_data():
         s3 = get_service("s3", "us-east-1")
         print("begin fetching data from {} object in {} bucket ....".format(
             bucketName, fileName))
-        with open(fileName, 'wb') as data:
+        with open(path.join("data", fileName), 'wb') as data:
             s3.download_fileobj(bucketName, fileName, data)
         print("data successfully retrieved.")
         print("extracting file ....")
-        patoolib.extract_archive(fileName, outdir=".")
+        rar = RarFile(fileName)
+        dataPath = path.join(".", "data", "extracted")
+        rar.setpassword(getenv("SOURCE_FILE_PASSWORD"))
+        rar.extractall(dataPath)
         print("file successfully extracted.")
+        return dataPath
     except Exception as e:
         print("error fetching data -> ", e)
         raise e
