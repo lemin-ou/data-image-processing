@@ -217,7 +217,7 @@ Resources:
               echo "cloning done"
               cd ${GithubRepoName}
               echo "installing dependencies ...."
-              pip3 install -r requirements.txt
+              pip3 install --upgrade -r requirements.txt
   
   RunScript: 
     Type: AWS::SSM::Document
