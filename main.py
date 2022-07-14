@@ -1,10 +1,16 @@
+#!/usr/bin/env python3
+
+from getdata import get_data
+from processimage import main as imageprocessor
+from dotenv import load_dotenv
 from math import floor
 from os import path, listdir, mkdir
 from shutil import copy, move, rmtree
 import glob
+import subprocess
 from random import randint
 import csv
-from processimage import main as imageprocessor
+load_dotenv()
 
 
 def empty_dir(dir):
@@ -117,13 +123,17 @@ def append_score():
                  path.join(batch, "out_data.csv"))
         delete_temp(batch)
 
-
         # randomize_sample_images(to_generate)
-process_batch_sample(lambda x: [get_sample_dir(x)],
-                     lambda dir: (
-    empty_dir(create_dir(dir, 'output')),
-    empty_dir(create_dir(dir, 'rejected'))
-), lambda output: imageprocessor.save_image(output))
+# process_batch_sample(lambda x: [get_sample_dir(x)],
+#                      lambda dir: (
+#     empty_dir(create_dir(dir, 'output')),
+#     empty_dir(create_dir(dir, 'rejected'))
+# ), lambda output: imageprocessor.save_image(output))
 
 
+try:
+    get_data()
+except Exception as e:
+    print("Error in script, terminate instance")
+    subprocess.run("shutdown", "now")
 # append_score()
