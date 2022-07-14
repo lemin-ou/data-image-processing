@@ -1,6 +1,7 @@
 import boto3
 from os import getenv
 import patoolib
+
 session = boto3.Session(profile_name='infinidata', region_name="us-east-1")
 s3 = session.client("s3")
 
