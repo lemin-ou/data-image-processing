@@ -7,8 +7,8 @@ def get_service(service, region_name):
 
     if getenv("ENV") == "localhost":
         print('get_service: using local configuration ...')
-        session = boto3.Session(profile_name="infinidata",
-                                region_name=region_name) if region_name else boto3.Session(profile_name="infinidata")
+        session = boto3.Session(
+            region_name=region_name) if region_name else boto3.Session(profile_name="infinidata")
         return session.client(service)
     else:
         print('get_service: get credentials from ec2 instance ...')
@@ -21,8 +21,7 @@ def get_service(service, region_name):
 
 def get_data():
     bucketName = getenv("SOURCE_BUCKET_NAME")
-    print('dx', getenv("ENV"))
-    fileName = getenv("SOURCE_FILE_NAME").replace("+", " ")
+    fileName = getenv("SOURCE_FILE_NAME")
     print("begin fetching data from {} object in {} bucket ....".format(
         bucketName, fileName))
     try:

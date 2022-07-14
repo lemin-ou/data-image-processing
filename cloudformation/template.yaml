@@ -165,7 +165,9 @@ Resources:
                 Action: 
                 - "s3:PutObject"
                 - "s3:GetObject"
-                Resource: !Sub arn:${AWS::Partition}:s3:::${DeploymentBucket}/*
+                Resource: 
+                - !Sub arn:${AWS::Partition}:s3:::${DeploymentBucket}/*
+                - !Sub arn:${AWS::Partition}:s3:::cnam2022/*
   
   FTPSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -197,6 +199,13 @@ Resources:
   EC2Instance:
     Type: AWS::EC2::Instance
     Properties:
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp2
+            VolumeSize: 10
+            DeleteOnTermination: true
+        EbsOptimized: false
       ImageId:
         Ref: ImageId
       SubnetId:

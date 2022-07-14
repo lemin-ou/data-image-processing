@@ -2,10 +2,9 @@
 
 import csv
 from random import randint
-import subprocess
 import glob
 from shutil import copy, move, rmtree
-from os import path, listdir, mkdir
+from os import path, listdir, mkdir, system
 from math import floor
 from dotenv import load_dotenv
 load_dotenv()
@@ -135,8 +134,8 @@ try:
     get_data()
 except Exception as e:
     print("Error in script, terminate instance")
-    subprocess.run("shutdown now")
+    system("shutdown now")
 finally:
-    subprocess.run("shutdown now")
+    system("shutdown now")
 
 # append_score()
