@@ -219,10 +219,11 @@ Resources:
               git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
               echo "cloning done"
               cd ${GithubRepoName}
-              cd processimage/libsvm/ && make -B 
-              cd python && make
               echo "installing dependencies ...."
               pip3 install --upgrade -r requirements.txt
+              cd processimage/libsvm/ && make -B 
+              cd python && make
+              
   
   RunScript: 
     Type: AWS::SSM::Document

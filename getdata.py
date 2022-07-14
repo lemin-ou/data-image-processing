@@ -1,26 +1,27 @@
 import boto3
 from os import getenv
 import patoolib
-from botocore.config import Config
 
 
 def get_service(service, region_name):
-    config = Config(
-        region_name=region_name,
-        credential_source="Ec2InstanceMetadata"
-    )
-    profile = "infinidata" if getenv("ENV") == "localhost" else "ec2user"
-    print('get_service: using local configuration ...')
-    if region_name:
-        session = boto3.Session(profile_name=profile,  region_name=region_name)
-    else:
-        session = boto3.Session(profile_name=profile)
 
-    return session.client(service)
+    if getenv("ENV") == "localhost":
+        print('get_service: using local configuration ...')
+        session = boto3.Session(profile_name="infinidata",
+                                region_name=region_name) if region_name else boto3.Session(profile_name="infinidata")
+        return session.client(service)
+    else:
+        print('get_service: get credentials from ec2 instance ...')
+        session = boto3.Session(
+            region_name=region_name) if region_name else boto3.Session()
+        credentials = session.get_credentials()
+        credentials = credentials.get_frozen_credentials()
+        return boto3.client(service,  aws_access_key_id=credentials.access_key, aws_secret_access_key=credentials.secret_key, aws_session_token=credentials.token)
 
 
 def get_data():
     bucketName = getenv("SOURCE_BUCKET_NAME")
+    print('dx', getenv("ENV"))
     fileName = getenv("SOURCE_FILE_NAME").replace("+", " ")
     print("begin fetching data from {} object in {} bucket ....".format(
         bucketName, fileName))
