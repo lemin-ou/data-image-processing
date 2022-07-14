@@ -212,6 +212,10 @@ Resources:
           !Sub |
               #!/bin/bash
               sudo yum install git -y
+              cd ~[profile profilename]
+role_arn = arn:aws-cn:iam::123456789012:role/rolename
+credential_source = Ec2InstanceMetadata
+region = region
               echo "cloning repository  from https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git ...."
               git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
               echo "cloning done"
@@ -233,25 +237,31 @@ Resources:
           commands:
             type: String
             description: "(Required) The commands to run or the path to an existing script on the instance."
-            default: !Sub '$HOME/${GithubRepoName}/main.py'
+            default: !Sub |
+                         #!/bin/bash
+                         echo "
+                         [profile ec2user]
+                         role_arn = ${AllowS3AccessRole.Arn}
+                         credential_source = Ec2InstanceMetadata
+                         region = ${AWS::Region} " >> ~/.aws/config
+                         cd /${GithubRepoName}
+                         ./main.py
           InstanceId:
             type: String
             description: "(Required) The instance ID you want to run commands on."
             default: !Ref EC2Instance
         mainSteps:
-        - name: sayHello
+        - name: processImages
           action: 'aws:runCommand'
           inputs:
             DocumentName: AWS-RunShellScript
             Parameters:
-              InstanceIds:
-              - !Ref EC2Instance
               commands:
-              - !Sub |
-                    #!/bin/bash
-                    cd /${GithubRepoName}
-                    ./main.py
+              - "{{ commands }}"
+            InstanceIds:
+              - "{{ InstanceId }}"
       DocumentFormat: YAML
+      TargetType: /AWS::EC2::Instance
       DocumentType: Automation
       Name: 'CFN_runbook_example'
 
