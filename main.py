@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 
+import csv
+from random import randint
+import subprocess
+import glob
+from shutil import copy, move, rmtree
+from os import path, listdir, mkdir
+from math import floor
 from dotenv import load_dotenv
 load_dotenv()
 
-from processimage import main as imageprocessor
 from getdata import get_data
-from math import floor
-from os import path, listdir, mkdir
-from shutil import copy, move, rmtree
-import glob
-import subprocess
-from random import randint
-import csv
-
-
+from processimage import main as imageprocessor
 
 def empty_dir(dir):
     rmtree(dir)  # empty a directory
