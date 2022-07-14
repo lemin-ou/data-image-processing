@@ -153,6 +153,7 @@ Resources:
               - "sts:AssumeRole"
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
+        - 'arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy'
       Policies:
         -
           PolicyName: "allow-ec2-deployment-bucket-policy"
@@ -162,8 +163,8 @@ Resources:
               -
                 Effect: "Allow"
                 Action: 
-                - "s3:putObject"
-                - "s3:getObject"
+                - "s3:PutObject"
+                - "s3:GetObject"
                 Resource: !Sub arn:${AWS::Partition}:s3:::${DeploymentBucket}/*
   
   FTPSecurityGroup:
@@ -215,7 +216,39 @@ Resources:
               git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
               cd ${GithubRepoName}
               # pip3 install -r requirements.txt
-   
+  
+  RunScript: 
+    Type: AWS::SSM::Document
+    Properties:
+      Content:
+        schemaVersion: '0.3'
+        description: 'Run a script on a specific Linux instances.'
+        parameters:
+          AutomationAssumeRole:
+            type: String
+            description: (Optional) The ARN of the role that allows Automation to perform the actions on your behalf.
+            default: !GetAtt AllowS3AccessRole.Arn
+          commands:
+            type: String
+            description: "(Required) The commands to run or the path to an existing script on the instance."
+            default: !Sub '$HOME/${GithubRepoName}/main.py'
+          InstanceId:
+            type: String
+            description: "(Required) The instance ID you want to run commands on."
+            default: !Ref EC2Instance
+        mainSteps:
+        - name: sayHello
+          action: 'aws:runCommand'
+          inputs:
+            DocumentName: AWS-RunShellScript
+            Parameters:
+              InstanceIds:
+              - '{{InstanceId}}'
+              commands:
+              - "{{ commands }}"
+      DocumentFormat: YAML
+      DocumentType: Automation
+      Name: 'CFN_runbook_example'
 
 Outputs:
 
