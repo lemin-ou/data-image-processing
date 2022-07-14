@@ -20,6 +20,7 @@ pyparsing
 pysftp
 python-dateutil
 python-dotenv
+rarfile
 s3transfer
 scipy
 six
