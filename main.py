@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from getdata import get_data
+from processimage import main as imageprocessor
 import csv
 from random import randint
 import glob
@@ -9,8 +11,6 @@ from math import floor
 from dotenv import load_dotenv
 load_dotenv()
 
-from getdata import get_data
-from processimage import main as imageprocessor
 
 def empty_dir(dir):
     rmtree(dir)  # empty a directory
@@ -134,8 +134,10 @@ try:
     get_data()
 except Exception as e:
     print("Error in script, terminate instance")
-    system("shutdown now")
+    # system("shutdown now")
 finally:
-    system("shutdown now")
+    # system("shutdown now")
+    print("Everything went perfectly, stopping instance .")
+    pass
 
 # append_score()

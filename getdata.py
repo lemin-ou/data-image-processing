@@ -22,10 +22,10 @@ def get_service(service, region_name):
 def get_data():
     bucketName = getenv("SOURCE_BUCKET_NAME")
     fileName = getenv("SOURCE_FILE_NAME")
-    print("begin fetching data from {} object in {} bucket ....".format(
-        bucketName, fileName))
     try:
         s3 = get_service("s3", "us-east-1")
+        print("begin fetching data from {} object in {} bucket ....".format(
+            bucketName, fileName))
         with open(fileName, 'wb') as data:
             s3.download_fileobj(bucketName, fileName, data)
         print("data successfully retrieved.")
@@ -35,6 +35,3 @@ def get_data():
     except Exception as e:
         print("error fetching data -> ", e)
         raise e
-
-
-get_data()

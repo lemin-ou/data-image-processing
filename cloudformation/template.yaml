@@ -203,9 +203,9 @@ Resources:
         - DeviceName: /dev/xvda
           Ebs:
             VolumeType: gp2
-            VolumeSize: 10
+            VolumeSize: 100
             DeleteOnTermination: true
-        EbsOptimized: false
+      EbsOptimized: false
       ImageId:
         Ref: ImageId
       SubnetId:
@@ -257,6 +257,9 @@ Resources:
             type: String
             description: "(Required) The instance ID you want to run commands on."
             default: !Ref EC2Instance
+        CloudWatchOutputConfig:
+          CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+          CloudWatchOutputEnabled: true
         mainSteps:
         - name: processImages
           action: 'aws:runCommand'
