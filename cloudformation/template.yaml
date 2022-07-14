@@ -212,9 +212,9 @@ Resources:
           !Sub |
               #!/bin/bash
               sudo yum install git -y
-              echo cloning repository  ${GithubRepoName} ....
-              cd $HOME
+              echo "cloning repository  from https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git ...."
               git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
+              echo "cloning done"
               cd ${GithubRepoName}
               # pip3 install -r requirements.txt
   
