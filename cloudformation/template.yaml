@@ -216,7 +216,9 @@ Resources:
               git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
               echo "cloning done"
               cd
+              echo "changing working directory to $pwd"
               cd ${GithubRepoName}
+              echo "installing dependencies"
               pip3 install -r requirements.txt
   
   RunScript: 
