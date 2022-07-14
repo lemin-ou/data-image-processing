@@ -211,11 +211,10 @@ Resources:
         "Fn::Base64":
           !Sub |
               #!/bin/bash
-              sudo yum install git -y
-              cd ~[profile profilename]
-role_arn = arn:aws-cn:iam::123456789012:role/rolename
-credential_source = Ec2InstanceMetadata
-region = region
+              yum update -y
+              yum upgrade -y
+              yum install ffmpeg libsm6 libxext6  -y
+              yum install git -y
               echo "cloning repository  from https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git ...."
               git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
               echo "cloning done"
@@ -239,11 +238,12 @@ region = region
             description: "(Required) The commands to run or the path to an existing script on the instance."
             default: !Sub |
                          #!/bin/bash
+                         mkdir ~/.aws
                          echo "
                          [profile ec2user]
                          role_arn = ${AllowS3AccessRole.Arn}
                          credential_source = Ec2InstanceMetadata
-                         region = ${AWS::Region} " >> ~/.aws/config
+                         region = ${AWS::Region} " > ~/.aws/config
                          cd /${GithubRepoName}
                          ./main.py
           InstanceId:
