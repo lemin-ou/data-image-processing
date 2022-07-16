@@ -131,13 +131,14 @@ def append_score():
 
 
 try:
+    print("Begin executing orchestrator ....")
+    print("STEP 1: download and extracting data from S3 ...")
     get_data()
+    print("STEP 1: handled successfully")
 except Exception as e:
-    print("Error in script, terminate instance")
-    # system("shutdown now")
+    print("Error in orchestrator")
 finally:
-    # system("shutdown now")
-    print("Everything went perfectly, stopping instance .")
-    pass
+    print("Finish executing orchestrator, stopping instance ....")
+    system("shutdown now")
 
 # append_score()

@@ -169,6 +169,45 @@ Resources:
                 - !Sub arn:${AWS::Partition}:s3:::${DeploymentBucket}/*
                 - !Sub arn:${AWS::Partition}:s3:::cnam2022/*
   
+  AllowEventBridgeToExecuteCommandRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: "/"
+      RoleName: EventBridgeExecuteCommandOnTaggedEc2
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service:
+                - "events.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonSSMAutomationRole'
+      Policies:
+        -
+          PolicyName: "allow-event-bridge-to-run-command"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+                Effect: "Allow"
+                Action: 
+                - ssm:SendCommand
+                Resource: 
+                - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*
+                Condition:
+                  StringEquals:
+                    "ec2:ResourceTag/InstancePurpose": ImageProcessorInstance
+              -
+                Effect: "Allow"
+                Action: 
+                - ssm:SendCommand
+                Resource: 
+                - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:document/${RunScript}"
+
   FTPSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -198,6 +237,7 @@ Resources:
         - Ref: AllowS3AccessRole
   EC2Instance:
     Type: AWS::EC2::Instance
+    DependsOn: RunScriptOnEC2InstanceRunning
     Properties:
       BlockDeviceMappings:
         - DeviceName: /dev/xvda
@@ -216,6 +256,9 @@ Resources:
         - !GetAtt FTPSecurityGroup.GroupId
       IamInstanceProfile:
         Ref: InstanceProfile
+      Tags: 
+        - Key: InstancePurpose
+          Value: ImageProcessorInstance
       UserData:
         "Fn::Base64":
           !Sub |
@@ -231,6 +274,7 @@ Resources:
               git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
               echo "cloning done"
               cd ${GithubRepoName}
+              mkdir -p data/extracted
               echo "installing dependencies ...."
               pip3 install --upgrade -r requirements.txt
               cd processimage/libsvm/ && make -B 
@@ -255,11 +299,6 @@ Resources:
                          #!/bin/bash
                           cd /cnam-image-processor
                           python3 main.py
-
-          InstanceId:
-            type: String
-            description: "(Required) The instance ID you want to run commands on."
-            default: !Ref EC2Instance
         mainSteps:
         - name: processImages
           action: 'aws:runCommand'
@@ -271,13 +310,37 @@ Resources:
             CloudWatchOutputConfig:
               CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
               CloudWatchOutputEnabled: true
-            InstanceIds:
-              - "{{ InstanceId }}"
+            Targets:
+              - Key: tag:InstancePurpose
+                Values:
+                  - ImageProcessorInstance
       DocumentFormat: YAML
       TargetType: /AWS::EC2::Instance
       DocumentType: Automation
-      Name: 'CFN_runbook_example'
+      Name: 'Execute-Script-RunBook'
 
+  RunScriptOnEC2InstanceRunning: 
+    Type: AWS::Events::Rule
+    Properties: 
+      Description: "execute when the ec2 instance is fully running"
+      RoleArn: !GetAtt AllowEventBridgeToExecuteCommandRole.Arn
+      EventPattern: 
+        source: 
+          - "aws.ssm"
+        detail-type: 
+          - "AWS API Call via CloudTrail"
+        detail: 
+          eventSource:
+            - "ssm.amazonaws.com"
+          eventName: 
+            - "UpdateInstanceInformation"
+      State: "ENABLED"
+      Targets: 
+        - 
+          Id: !Ref RunScript
+          Arn: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${RunScript}:$DEFAULT
+          RoleArn: !GetAtt AllowS3AccessRole.Arn
+        
 Outputs:
 
   DeploymentBucket:
