@@ -135,10 +135,9 @@ def append_score():
                     if i == 0:
                         logger.info('row sample -> %s ' % row)
                         i += 1
-                    impath = row["Photo"].split('/')
-                    impath.pop(1)
+                    impath = row["Photo"].strip("/")
                     (final, score, image_path) = imageprocessor.apply_processors(
-                        batch + "/".join(impath))
+                        path.join(batch, impath))
                     row["Score"] = score or 'Unknown'
                     writer.writerow(row)
                     check_score((final, score, image_path, batch))
