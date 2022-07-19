@@ -6,9 +6,13 @@ cffi
 click
 cryptography
 jmespath
+jproperties
 numpy
 opencv-python
+opencv-contrib-python
+openpyxl
 packaging
+pandas
 paramiko
 patool
 pep517

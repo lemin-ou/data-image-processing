@@ -147,8 +147,8 @@ def compute_features(img):
             feat.append(m.pow(rsigma_best, 2))  # right variance square
 
         # resize the image on next iteration
-        im_original = cv2.resize(
-            im_original, (0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_CUBIC)
+        # im_original = cv2.resize(
+        #     im_original, (0, 0), fx=0.5, fy=0.5, interpolation=cv2.INTER_CUBIC)
     return feat
 
 # function to calculate BRISQUE quality score

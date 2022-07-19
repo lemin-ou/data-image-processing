@@ -182,31 +182,62 @@ Resources:
             Principal:
               Service:
                 - "events.amazonaws.com"
+                - "ec2.amazonaws.com"
             Action:
               - "sts:AssumeRole"
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/service-role/AmazonSSMAutomationRole'
       Policies:
         -
-          PolicyName: "allow-event-bridge-to-run-command"
+          PolicyName: "allow-to-list-rules"
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
               -
                 Effect: "Allow"
                 Action: 
-                - ssm:SendCommand
+                - "events:ListRules"
                 Resource: 
-                - !Sub arn:aws:ec2:${AWS::Region}:${AWS::AccountId}:instance/*
-                Condition:
-                  StringEquals:
-                    "ec2:ResourceTag/InstancePurpose": ImageProcessorInstance
-              -
+                - !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/*
+
+        - 
+          PolicyName: "allow-to-disable-image-processor-rule"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - 
                 Effect: "Allow"
-                Action: 
-                - ssm:SendCommand
+                Action:
+                - "events:DisableRule"
                 Resource: 
-                - !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:document/${RunScript}"
+                - !Sub arn:${AWS::Partition}:events:${AWS::Region}:${AWS::AccountId}:rule/*
+        -
+          PolicyName: "allow-to-describe-instances"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+               Effect: "Allow"
+               Action: 
+               - "ec2:DescribeInstances"
+               Resource: '*'
+        -
+          PolicyName: "allow-to-stop-image-processor-instance"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              -
+               Effect: "Allow"
+               Action: 
+               - "ec2:StopInstances"
+               Resource: 
+               - !Sub arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:instance/*
+               Condition:
+                  StringEquals:
+                    aws:ResourceTag:Purpose: ImageProcessor
+                 
+  
+      
 
   FTPSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -257,8 +288,8 @@ Resources:
       IamInstanceProfile:
         Ref: InstanceProfile
       Tags: 
-        - Key: InstancePurpose
-          Value: ImageProcessorInstance
+        - Key: Purpose
+          Value: ImageProcessor
       UserData:
         "Fn::Base64":
           !Sub |
@@ -268,22 +299,17 @@ Resources:
               yum install libXext libSM libXrender mesa-libGL.x86_64 git -y
               yum groupinstall 'Development Tools' -y 
               wget https://www.rarlab.com/rar/rarlinux-x64-6.0.2.tar.gz
-              tar -zxvf rarlinux-x64-5.5.0.tar.gz
+              tar -zxvf rarlinux-x64-6.0.2.tar.gz
               cd rar/ && cp -v rar unrar /usr/bin/ && cd ..
-              echo "cloning repository  from https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git ...."
-              git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
-              echo "cloning done"
-              cd ${GithubRepoName}
-              mkdir -p data/extracted
-              echo "installing dependencies ...."
-              pip3 install --upgrade -r requirements.txt
-              cd processimage/libsvm/ && make -B 
-              cd python && make
+              
               
   
   RunScript: 
     Type: AWS::SSM::Document
     Properties:
+      Tags: 
+        - Key: Purpose
+          Value: ImageProcessor
       Content:
         schemaVersion: '0.3'
         description: 'Run a script on a specific Linux instances.'
@@ -291,29 +317,150 @@ Resources:
           AutomationAssumeRole:
             type: String
             description: (Optional) The ARN of the role that allows Automation to perform the actions on your behalf.
-            default: !GetAtt AllowS3AccessRole.Arn
+            default: !GetAtt AllowEventBridgeToExecuteCommandRole.Arn
           commands:
             type: String
             description: "(Required) The commands to run or the path to an existing script on the instance."
             default: !Sub |
                          #!/bin/bash
-                          cd /cnam-image-processor
-                          python3 main.py
+                          cd /root/
+                          echo "cloning repository ...."
+                          git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
+                          echo "cloning done"
+                          cd ${GithubRepoName}
+                          echo "creating necessary directories"
+                          mkdir -p data/extracted
+                          echo "installing dependencies ...."
+                          pip3 install --upgrade -r requirements.txt
+                          echo "build libsvm for all target ...."
+                          cd processimage/libsvm/ && make -B 
+                          echo "build libsvm for python ...."
+                          cd python && make
+                          echo "All successfully done."
         mainSteps:
-        - name: processImages
-          action: 'aws:runCommand'
-          inputs:
-            DocumentName: AWS-RunShellScript
-            Parameters:
-              commands:
-              - "{{ commands }}"
-            CloudWatchOutputConfig:
-              CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
-              CloudWatchOutputEnabled: true
-            Targets:
-              - Key: tag:InstancePurpose
-                Values:
-                  - ImageProcessorInstance
+          - name: sleep
+            action: aws:sleep
+            description: "wait 2 minutes for dependencies to be installed on the target ec2"
+            inputs:
+              Duration: PT2M
+            nextStep: getInstanceIdFromTheTag
+          - name: getInstanceIdFromTheTag
+            action: 'aws:executeAwsApi'
+            onFailure: Abort
+            inputs:
+              Service: ec2
+              Api: DescribeInstances
+              Filters:
+                - Name: 'tag:Purpose'
+                  Values: 
+                  - ImageProcessor
+            outputs:
+              - Name: InstanceId
+                Selector: '$.Reservations[0].Instances[0].InstanceId'
+                Type: String
+            nextStep: cloneCodeAndInstallDependencies
+          # - name: assertInstanceStateRunning
+          #   action: aws:assertAwsResourceProperty
+          #   timeoutSeconds: 300
+          #   onFailure: 'step:getRuleFullName'
+          #   inputs:
+          #     Service: ec2
+          #     Api: DescribeInstanceStatus
+          #     InstanceIds:
+          #     - "{{ getInstanceIdFromTheTag.InstanceId }}"
+          #     PropertySelector: "$.InstanceStatuses[0].InstanceState.Name"
+          #     DesiredValues:
+          #     - running
+          #   nextStep: cloneCodeAndInstallDependencies
+          - name: cloneCodeAndInstallDependencies
+            action: 'aws:runCommand'
+            onFailure: 'step:getRuleFullName'
+            inputs:
+              DocumentName: AWS-RunShellScript
+              Parameters:
+                commands:
+                - "{{ commands }}"
+              CloudWatchOutputConfig:
+                CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+                CloudWatchOutputEnabled: true
+              InstanceIds:
+                - "{{ getInstanceIdFromTheTag.InstanceId }}"
+            nextStep: DownloadExtractDataFromS3
+          - name: DownloadExtractDataFromS3
+            action: 'aws:runCommand'
+            onFailure: 'step:getRuleFullName'
+            inputs:
+              DocumentName: AWS-RunShellScript
+              Parameters:
+                commands:
+                - !Sub "cd /root/${GithubRepoName} && python3 main.py 1"
+              CloudWatchOutputConfig:
+                CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+                CloudWatchOutputEnabled: true
+              InstanceIds:
+                - "{{ getInstanceIdFromTheTag.InstanceId }}"
+            nextStep: ConvertXlsxFileToCsv
+          - name: ConvertXlsxFileToCsv
+            action: 'aws:runCommand'
+            onFailure: 'step:getRuleFullName'
+            inputs:
+              DocumentName: AWS-RunShellScript
+              Parameters:
+                commands:
+                - !Sub "cd /root/${GithubRepoName} && python3 main.py 2"
+              CloudWatchOutputConfig:
+                CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+                CloudWatchOutputEnabled: true
+              InstanceIds:
+                - "{{ getInstanceIdFromTheTag.InstanceId }}"
+            nextStep: ProcessImagesInEachSubBatch
+          - name: ProcessImagesInEachSubBatch
+            action: 'aws:runCommand'
+            onFailure: Continue
+            inputs:
+              DocumentName: AWS-RunShellScript
+              Parameters:
+                commands:
+                - !Sub "cd /root/${GithubRepoName} && python3 main.py 3"
+              CloudWatchOutputConfig:
+                CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+                CloudWatchOutputEnabled: true
+              InstanceIds:
+                - "{{ getInstanceIdFromTheTag.InstanceId }}"
+            nextStep: getRuleFullName
+
+          - name: getRuleFullName
+            action: 'aws:executeAwsApi'
+            timeoutSeconds: 60
+            onFailure: 'step:stopInstance'
+            inputs:
+              Service: events
+              Api: ListRules
+              NamePrefix: !Sub '${AWS::StackName}-'
+            outputs:
+              - Name: ruleName
+                Selector: '$.Rules[0].Name'
+                Type: String
+            nextStep: disableEventBridgeRule
+          - name: disableEventBridgeRule
+            action: 'aws:executeAwsApi'
+            timeoutSeconds: 60
+            onFailure: Continue
+            inputs:
+              Service: events
+              Api: DisableRule
+              Name: "{{ getRuleFullName.ruleName }}"
+            nextStep: stopInstance
+          - name: stopInstance
+            action: 'aws:executeAwsApi'
+            timeoutSeconds: 60
+            inputs:
+              Service: ec2
+              Api: StopInstances
+              InstanceIds:
+                - "{{ getInstanceIdFromTheTag.InstanceId }}"
+
+
       DocumentFormat: YAML
       TargetType: /AWS::EC2::Instance
       DocumentType: Automation
@@ -326,20 +473,24 @@ Resources:
       RoleArn: !GetAtt AllowEventBridgeToExecuteCommandRole.Arn
       EventPattern: 
         source: 
-          - "aws.ssm"
+          - "aws.ec2"
+          # - "aws.ssm"
         detail-type: 
-          - "AWS API Call via CloudTrail"
+          - "EC2 Instance State-change Notification"
+          # - "AWS API Call via CloudTrail"
         detail: 
-          eventSource:
-            - "ssm.amazonaws.com"
-          eventName: 
-            - "UpdateInstanceInformation"
+          state:
+            - running
+          # eventSource:
+          #   - "ssm.amazonaws.com"
+          # eventName: 
+          #   - "UpdateInstanceInformation"
       State: "ENABLED"
       Targets: 
         - 
           Id: !Ref RunScript
           Arn: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:automation-definition/${RunScript}:$DEFAULT
-          RoleArn: !GetAtt AllowS3AccessRole.Arn
+          RoleArn: !GetAtt AllowEventBridgeToExecuteCommandRole.Arn
         
 Outputs:
 
