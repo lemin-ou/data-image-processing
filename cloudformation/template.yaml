@@ -454,6 +454,7 @@ Resources:
           - name: stopInstance
             action: 'aws:executeAwsApi'
             timeoutSeconds: 60
+            isEnd: true
             inputs:
               Service: ec2
               Api: StopInstances
