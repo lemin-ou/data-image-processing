@@ -328,6 +328,8 @@ Resources:
                           git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
                           echo "cloning done"
                           cd ${GithubRepoName}
+                          echo 'set environment to prod '
+                          echo "ENV = prod" >> .env
                           echo "creating necessary directories"
                           mkdir -p data/extracted
                           echo "installing dependencies ...."
