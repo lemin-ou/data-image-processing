@@ -6,6 +6,6 @@ __pycache__/
 LapSRN/
 
 EDSR_x2.pb
-EDSR_x3.pb
+# EDSR_x3.pb
 
 log-*.log
