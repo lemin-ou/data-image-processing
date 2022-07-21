@@ -9,9 +9,10 @@ import pandas as pd
 import traceback
 from jproperties import Properties
 
+from utils import get_root
+
 
 def get_service(service, region_name):
-
     if getenv("ENV") == "localhost":
         logger.info('using local configuration ...')
         session = boto3.Session(profile_name="infinidata",
@@ -27,26 +28,30 @@ def get_service(service, region_name):
 
 
 def get_data():
+    isNotLocal = getenv("ENV") != 'localhost'
     bucketName = getenv("SOURCE_BUCKET_NAME")
     fileName = getenv("SOURCE_FILE_NAME")
     try:
-        s3 = get_service("s3", "us-east-1")
-        logger.info("begin fetching data from {} object in {} bucket ....".format(
-            bucketName, fileName))
-        with open(path.join("data", fileName), 'wb') as data:
-            s3.download_fileobj(bucketName, fileName, data)
-        logger.info("data successfully retrieved.")
-        logger.info("extracting file ....")
-        rar = RarFile(path.join("data", fileName))
-        dataPath = Path(path.join("data", "extracted"))
-        rar.setpassword(getenv("SOURCE_FILE_PASSWORD"))
-        rar.extractall(str(dataPath))
-        logger.info("file successfully extracted.")
+        isNotLocal = getenv("ENV") != 'localhost'
+        if isNotLocal:
+            s3 = get_service("s3", "us-east-1")
+            logger.info("begin fetching data from {} object in {} bucket ....".format(
+                bucketName, fileName))
+            with open(path.join("data", fileName), 'wb') as data:
+                s3.download_fileobj(bucketName, fileName, data)
+            logger.info("data successfully retrieved.")
+            logger.info("extracting file ....")
+            rar = RarFile(path.join("data", fileName))
+            dataPath = Path(path.join("data", "extracted"))
+            rar.setpassword(getenv("SOURCE_FILE_PASSWORD"))
+            rar.extractall(str(dataPath))
+            logger.info("file successfully extracted.")
         logger.info("write data file path .....")
         with open("requirements.properties", "w") as configFile:
             extractedDir = ""
             try:
-                extractedDir = dataPath.joinpath(Path(listdir(dataPath)[0]))
+                extractedDir = dataPath.joinpath(
+                    Path(listdir(dataPath)[0])) if isNotLocal else Path(get_root())
                 extractedDir = str(extractedDir.resolve())
                 withoutExtension = glob(
                     str(extractedDir) + "/*.xlsx")[0].split(".")
@@ -63,7 +68,7 @@ def get_data():
             configFile.write("csvpath={}.csv\n".format(
                 path.join(extractedDir, withoutExtension)))
             configFile.write("imagespath={}\n".format(extractedDir))
-        return dataPath
+        return extractedDir
     except Exception as e:
         logger.error("error fetching data -> %s " % e)
         raise e

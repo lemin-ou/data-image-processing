@@ -4,6 +4,8 @@ import imghdr
 from pathlib import Path
 import traceback
 import cv2
+
+from utils import create_dirs
 from .algorithms import resize, denoising, gif2jpg, sharpness, brightness, up_scale, save
 from .libsvm.python.brisquequality import main as measure_quality
 from logs import logger
@@ -17,14 +19,14 @@ processors = [up_scale, resize, brightness,
               sharpness, measure_quality,  denoising]
 
 
-def apply_processors(image):
+def apply_processors(image, parent):
     print("\n" + '-' * 100, "\n")
 
     logger.info('processing image {} ...'.format(image))
     if path.isfile(image) and len(image) > 0 and imghdr.what(image):
-        image_path, old_path = gif2jpg(image)
         # load the original input image
         try:
+            image_path, old_path = gif2jpg(image, parent)
             tmp = cv2.imread(image_path)
             for processor in processors:
                 tmp = processor(tmp, width, height, scale)
@@ -33,8 +35,7 @@ def apply_processors(image):
         except Exception as e:
             logger.info(
                 'Error processing image: {}, reason = {} .'.format(old_path, e))
-            traceback.print_tb(e.__traceback__)
-            return (tmp, None, old_path)
+            raise e
         finally:
             print("\n" + '-' * 100, "\n")
 
@@ -59,16 +60,22 @@ def create_dir(parent, dir):
 
 def save_image(output, desired_score):
     """ save the image to a specific directory depends on the image quality score """
-    final, score, image_path = output
+    final, score, image_path, root = output
     pathRef = Path(image_path)
     parent = pathRef.parent
+    rootPath = Path(root)
     image_name = pathRef.name.split(".")
     image_extension = image_name.pop()
+    outputPath = create_dir(
+        root, 'output') if score and score < desired_score else create_dir(root, 'rejected')
+    joinedPath = Path(outputPath).joinpath(parent.relative_to(rootPath))
+    create_dirs(joinedPath)
+
     try:
         image_out_path = str(path.join(
-            create_dir(parent, 'output') if score and score < desired_score else create_dir(parent, 'rejected'), ".".join(image_name))) + (".%s" % image_extension)
+            joinedPath, ".".join(image_name))) + (".%s" % image_extension)
         logger.info("saving image to this location: %s" % image_out_path)
-        _save_final(image_out_path, final, parent)
+        _save_final(image_out_path, final, root)
     except Exception as e:
         logger.error("Error: could't save the image due to -> %s " % e)
         raise e

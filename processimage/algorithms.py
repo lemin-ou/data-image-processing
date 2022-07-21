@@ -1,3 +1,4 @@
+from os import path
 import numpy as np
 import cv2
 from numpy.linalg import norm
@@ -8,6 +9,7 @@ from pathlib import Path
 from shutil import move
 import logs
 from logs import logger
+from utils import create_dirs
 
 
 def brightness(img, *args):
@@ -93,7 +95,7 @@ def denoising(image, width, height, *args):
     return (norm_img, image[1]) if type(image) == tuple else norm_img
 
 
-def gif2jpg(file_name: str):
+def gif2jpg(file_name: str, parent):
     """
     convert gif to `num_key_frames` images with jpg format
     :param file_name: gif file name
@@ -118,13 +120,20 @@ def gif2jpg(file_name: str):
         image = Image.new("RGB", im.size)
         image.getdata()
         image.putdata(newData)
-        file_full_path = file_name.split("/")
-        name = file_full_path.pop()
-        new_file_name = '{}/../.tmp/{}.JPG'.format(
-            "/".join(file_full_path), name.removesuffix('.%s' % extension.upper()).removesuffix('.%s' % extension.lower()))
-        image.save(new_file_name)
-        logger.info('gif2jpg: gif file new path ->', new_file_name)
-        return (new_file_name, file_name)
+        fullPath = Path(file_name)
+        name = fullPath.name.split(".")
+        name.pop()  # remove extension
+        fullPath = fullPath.parent
+        parentPath = Path(parent)
+        relativePath = fullPath.relative_to(parentPath)
+        finalPath = '{}/.tmp/{}'.format(parentPath, relativePath)
+        create_dirs(finalPath)
+        fileFinalPath = '{}/{}.JPG'.format(
+            finalPath, ".".join(name))
+
+        image.save(fileFinalPath)
+        logger.info('gif2jpg: gif file new path %s ' % fileFinalPath)
+        return (fileFinalPath, file_name)
 
 
 def save(location, image, parent):
@@ -133,11 +142,16 @@ def save(location, image, parent):
     """
     extension = location.split(".").pop()  # get the extension
     if extension.lower() == 'gif':
-        file_full_path = location.split("/")
-        name = file_full_path.pop()
-        old_path = '{}/../.tmp/{}.JPG'.format(
-            parent, name.removesuffix('.%s' % extension.upper()).removesuffix('.%s' % extension.lower()))
-        logger.info('gif2jpg: save the gif file to this new path ->', old_path)
+        fileFullPath = Path(location)
+        # parentPath = Path(parent)
+        name = fileFullPath.name.split(".")
+        name.pop()  # remove extension
+        fileFullPath = fileFullPath.parent
+        # relativePath = fileFullPath.relative_to(parentPath)
+
+        old_path = '{}.JPG'.format(path.join(fileFullPath), ".".join(name))
+        logger.info(
+            'gif2jpg: save the gif file to this new path -> %s ' % old_path)
         cv2.imwrite(filename=old_path,  img=image)
         move(old_path, location)
     else:
