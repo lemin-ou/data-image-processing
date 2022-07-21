@@ -63,7 +63,8 @@ def check_score(output):
         extension, threshold))
     saveIn = path.join(pathRef.parent, "{}.{}".format(
         ".".join(fileFullName), extension))
-    imageprocessor.save_image((final, score, saveIn, parent), int(threshold))
+    imageprocessor.save_image(
+        (final, score, saveIn, parent), int(threshold))
 
 
 def append_score():
@@ -81,6 +82,8 @@ def append_score():
         with open(dataFile, 'r') as input:
             reader = csv.DictReader(input, delimiter='@')
             header = reader.fieldnames
+            if len(header) > int(getenv("SOURCE_FILE_COLUMNS")):
+                raise Exception("unexpected csv file structure")
             header.append('Score')
 
             writer = csv.DictWriter(out_file, fieldnames=header, delimiter='@')
@@ -93,7 +96,7 @@ def append_score():
                 impath = path.join(root, row["Photo"].strip("/"))
                 (final, score, image_path) = imageprocessor.apply_processors(
                     impath, root)
-                row["Score"] = score or 'Unknown'
+                row["Score"] = score
                 writer.writerow(row)
                 check_score((final, score, image_path, root))
             out_file.close()

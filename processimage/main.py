@@ -1,9 +1,12 @@
+from distutils.file_util import move_file
 from math import floor
-from os import path, mkdir
+from os import path, mkdir, system
 import imghdr
 from pathlib import Path
+from shutil import move
 import traceback
 import cv2
+import numpy as np
 
 from utils import create_dirs
 from .algorithms import resize, denoising, gif2jpg, sharpness, brightness, up_scale, save
@@ -42,7 +45,7 @@ def apply_processors(image, parent):
     else:
         logger.info('Not exactly an image skipping.')
         print("\n" + '-' * 100, "\n")
-        return (cv2.imread(image), None, image)
+        return (cv2.imread(image), 1000, image)
 
 
 def _save_final(location, image, parent):
@@ -67,15 +70,22 @@ def save_image(output, desired_score):
     image_name = pathRef.name.split(".")
     image_extension = image_name.pop()
     outputPath = create_dir(
-        root, 'output') if score and score < desired_score else create_dir(root, 'rejected')
+        root, 'output') if type(score) == int and score < desired_score else create_dir(root, 'rejected')
     joinedPath = Path(outputPath).joinpath(parent.relative_to(rootPath))
     create_dirs(joinedPath)
 
     try:
         image_out_path = str(path.join(
             joinedPath, ".".join(image_name))) + (".%s" % image_extension)
-        logger.info("saving image to this location: %s" % image_out_path)
-        _save_final(image_out_path, final, root)
+        logger.info("saving image to this location: %s" %
+                    image_out_path)
+        if isinstance(final, np.ndarray):
+            _save_final(image_out_path, final, root)
+        else:
+            print('finalOuw:', final)
+            move(image_path.strip("."),
+                 joinedPath.absolute().as_posix())
+
     except Exception as e:
         logger.error("Error: could't save the image due to -> %s " % e)
         raise e

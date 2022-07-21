@@ -40,7 +40,7 @@ def resize(image, width, height, *args):
     dim = (width, height)
     # perform the actual resizing of the image
     resized = cv2.resize(
-        image, dim, interpolation=cv2.INTER_CUBIC)
+        image, dim, interpolation=cv2.INTER_AREA)
 
     return resized
 
