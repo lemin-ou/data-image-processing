@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:talendfile="platform:/resource/org.talend.model/model/TalendFile.xsd">
+  <talendfile:ContextType xmi:id="_BQC4wAdoEe2lKJlNEw31Qg" confirmationNeeded="false" name="Default">
+    <contextParameter xmi:id="_BQEG4AdoEe2lKJlNEw31Qg" comment="" name="csvpath" prompt="csvpath?" promptNeeded="false" type="id_String" value="&quot;C:/Users/BouyeAhmed/Downloads/Lot_0.csv&quot;"/>
+    <contextParameter xmi:id="_aKFI4AdyEe2lKJlNEw31Qg" comment="" name="validcsvpath" prompt="validcsvpath?" promptNeeded="false" type="id_String" value="&quot;C:/Users/BouyeAhmed/Downloads/outCnamValidation.csv&quot;"/>
+    <contextParameter xmi:id="_uSNUwAdyEe2lKJlNEw31Qg" comment="" name="validexcelpath" prompt="validexcelpath?" promptNeeded="false" type="id_String" value="&quot;C:/Users/BouyeAhmed/Downloads/outCnamValidationsExcel.xlsx&quot;"/>
+    <contextParameter xmi:id="_5ivN0AdyEe2lKJlNEw31Qg" comment="" name="rejectcsvpath" prompt="rejectcsvpath?" promptNeeded="false" type="id_String" value="&quot;C:/Users/BouyeAhmed/Downloads/outCnamRejections.csv&quot;"/>
+    <contextParameter xmi:id="_DabEoAdzEe2lKJlNEw31Qg" comment="" name="rejectexcelpath" prompt="rejectexcelpath?" promptNeeded="false" type="id_String" value="&quot;C:/Users/BouyeAhmed/Downloads/outCnamRejectionsExcel.xlsx&quot;"/>
+    <contextParameter xmi:id="_6_SVQAd7Ee2lKJlNEw31Qg" comment="" name="IMAGE_JPG_THRESHOLD" prompt="IMAGE_JPG_THRESHOLD?" promptNeeded="false" type="id_Integer" value="49"/>
+    <contextParameter xmi:id="_6_SVQQd7Ee2lKJlNEw31Qg" comment="" name="IMAGE_PNG_THRESHOLD" prompt="IMAGE_PNG_THRESHOLD?" promptNeeded="false" type="id_Integer" value="60"/>
+    <contextParameter xmi:id="_6_SVQgd7Ee2lKJlNEw31Qg" comment="" name="IMAGE_GIF_THRESHOLD" prompt="IMAGE_GIF_THRESHOLD?" promptNeeded="false" type="id_Integer" value="70"/>
+    <contextParameter xmi:id="_6_SVQwd7Ee2lKJlNEw31Qg" comment="" name="IMAGE_BMP_THRESHOLD" prompt="IMAGE_BMP_THRESHOLD?" promptNeeded="false" type="id_Integer" value="122"/>
+    <contextParameter xmi:id="_Gh_YoAgaEe2j-JaGyV6eCA" comment="" name="default_score" prompt="default_score?" promptNeeded="false" type="id_Integer" value="60"/>
+  </talendfile:ContextType>
+  <talendfile:ContextType xmi:id="_BQEG4QdoEe2lKJlNEw31Qg" confirmationNeeded="false" name="prod">
+    <contextParameter xmi:id="_BQEG4gdoEe2lKJlNEw31Qg" comment="" name="csvpath" prompt="csvpath?" promptNeeded="false" type="id_String" value="&quot;C:/Users/BouyeAhmed/Downloads/Lot_0.csv&quot;"/>
+    <contextParameter xmi:id="_aKFI4QdyEe2lKJlNEw31Qg" comment="" name="validcsvpath" prompt="validcsvpath?" promptNeeded="false" type="id_String" value="&quot;C:/Users/BouyeAhmed/Downloads/outCnamValidation.csv&quot;"/>
+    <contextParameter xmi:id="_uSNUwQdyEe2lKJlNEw31Qg" comment="" name="validexcelpath" prompt="validexcelpath?" promptNeeded="false" type="id_String" value="&quot;C:/Users/BouyeAhmed/Downloads/outCnamValidationsExcel.xlsx&quot;"/>
+    <contextParameter xmi:id="_5ivN0QdyEe2lKJlNEw31Qg" comment="" name="rejectcsvpath" prompt="rejectcsvpath?" promptNeeded="false" type="id_String" value="&quot;C:/Users/BouyeAhmed/Downloads/outCnamRejections.csv&quot;"/>
+    <contextParameter xmi:id="_DabEoQdzEe2lKJlNEw31Qg" comment="" name="rejectexcelpath" prompt="rejectexcelpath?" promptNeeded="false" type="id_String" value="&quot;C:/Users/BouyeAhmed/Downloads/outCnamRejectionsExcel.xlsx&quot;"/>
+    <contextParameter xmi:id="_6_SVRAd7Ee2lKJlNEw31Qg" comment="" name="IMAGE_JPG_THRESHOLD" prompt="IMAGE_JPG_THRESHOLD?" promptNeeded="false" type="id_Integer" value="49"/>
+    <contextParameter xmi:id="_6_SVRQd7Ee2lKJlNEw31Qg" comment="" name="IMAGE_PNG_THRESHOLD" prompt="IMAGE_PNG_THRESHOLD?" promptNeeded="false" type="id_Integer" value="60"/>
+    <contextParameter xmi:id="_6_SVRgd7Ee2lKJlNEw31Qg" comment="" name="IMAGE_GIF_THRESHOLD" prompt="IMAGE_GIF_THRESHOLD?" promptNeeded="false" type="id_Integer" value="70"/>
+    <contextParameter xmi:id="_6_SVRwd7Ee2lKJlNEw31Qg" comment="" name="IMAGE_BMP_THRESHOLD" prompt="IMAGE_BMP_THRESHOLD?" promptNeeded="false" type="id_Integer" value="122"/>
+    <contextParameter xmi:id="_Gh_YoQgaEe2j-JaGyV6eCA" comment="" name="default_score" prompt="default_score?" promptNeeded="false" type="id_Integer" value="60"/>
+  </talendfile:ContextType>
+</xmi:XMI>

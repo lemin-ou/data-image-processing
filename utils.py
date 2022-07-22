@@ -3,6 +3,7 @@ from logs import logger
 import glob
 from os import makedirs, mkdir, path
 from shutil import rmtree
+import load_env
 
 
 def create_dir(parent, dir):

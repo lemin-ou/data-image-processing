@@ -4,7 +4,7 @@ from pathlib import Path
 from sys import argv
 import sys
 import traceback
-import load_env
+from subprocess import call
 from processimage import main as imageprocessor
 import csv
 from random import randint
@@ -58,13 +58,25 @@ def check_score(output):
     fileFullName = pathRef.name.split(".")
     extension = fileFullName.pop()
 
-    threshold = getenv('IMAGE_%s_THRESHOLD' % extension.upper()) or 60
+    threshold = getenv('IMAGE_%s_THRESHOLD' %
+                       extension.upper()) or getenv("IMAGE_DEFAULT_THRESHOLD")
     logger.info("check_score: detecting threshold ... extension = %s, threshold = %s " % (
         extension, threshold))
     saveIn = path.join(pathRef.parent, "{}.{}".format(
         ".".join(fileFullName), extension))
     imageprocessor.save_image(
         (final, score, saveIn, parent), int(threshold))
+
+
+def run_job():
+    try:
+        responseCode = call(getenv("JOB_SCRIPT_PATH"), shell=True)
+        logger.info("Executed job return code : %s " % responseCode)
+        if not type(responseCode) == int or responseCode != 0:
+            raise Exception("Unknown error, please refer to your job")
+    except Exception as e:
+        logger.error("Error when executing job %s " % e)
+        raise e
 
 
 def append_score():
@@ -120,7 +132,7 @@ steps = {
 
     2: {"name": 'Convert xlsx file to csv', "handler": convert_to_csv},
     3: {"name": 'Process Images in each sub-batch', "handler": append_score},
-    # 3: {"name": 'Convert xlsx file to csv', "handler": convert_to_csv},
+    4: {"name": 'Execute Data control Job', "handler": run_job},
 }
 
 try:

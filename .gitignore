@@ -8,4 +8,5 @@ LapSRN/
 EDSR_x2.pb
 # EDSR_x3.pb
 
+prod.properties
 log-*.log
