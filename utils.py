@@ -1,7 +1,8 @@
 
 from logs import logger
+from jproperties import Properties
 import glob
-from os import makedirs, mkdir, path
+from os import getenv, makedirs, mkdir, path
 from shutil import rmtree
 import load_env
 
@@ -28,6 +29,23 @@ def create_dirs(dir):
     return dir
 
 
+def load_config():
+    logger.info("loading configuration file")
+    configs = Properties()
+    with open('requirements.properties', 'rb') as configfile:
+        configs.load(configfile)
+
+    logger.info("context variables loaded......")
+
+    items = configs.items()
+    config_dist = {}
+
+    for item in items:
+        config_dist[item[0]] = item[1].data
+
+    return config_dist
+
+
 def empty_dir(dir):
     rmtree(dir)  # empty a directory
     mkdir(dir)  # create a directory
@@ -38,9 +56,12 @@ def delete_temp(batch):
 
 
 def get_root(root_path=__file__):
+    isNotLocal = getenv("ENV") != 'localhost'
+    config = load_config()
     file_dir = path.dirname(path.abspath(root_path))
     batchesPath = "{}/Lot_0\ pour\ test".format(path.join(file_dir, '..'))
-    return batchesPath.replace("\\ ", " ")
+    localRoot = batchesPath.replace("\\ ", " ")
+    return config.get("imagespath") if isNotLocal else localRoot
 
 
 def get_sample_dir():

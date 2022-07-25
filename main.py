@@ -10,8 +10,8 @@ import csv
 from random import randint
 import glob
 from shutil import copy, move, rmtree
-from os import EX_SOFTWARE, getenv, path, listdir, mkdir
-from data_preperation import get_data, convert_to_csv, load_config
+from os import EX_SOFTWARE, getenv, path, listdir
+from data_preperation import compress_directories, get_data, convert_to_csv, move_image_to_root, move_rejected_files, put_data
 from logs import logger
 from utils import *
 TO_GENERATE = 3
@@ -79,6 +79,26 @@ def run_job():
         raise e
 
 
+def move_rejected():
+    root = get_root()
+    move_rejected_files(root)
+
+
+def upload_files():
+    roots = ['output', 'rejected']
+    put_data(roots)
+
+
+def compress():
+    root = get_root()
+    compress_directories(root)
+
+
+def move_to_output():
+    root = get_root()
+    move_image_to_root(path.join(root, 'output'), path.join(root, 'output'))
+
+
 def append_score():
     isNotLocal = getenv("ENV") != 'localhost'
     try:
@@ -133,6 +153,10 @@ steps = {
     2: {"name": 'Convert xlsx file to csv', "handler": convert_to_csv},
     3: {"name": 'Process Images in each sub-batch', "handler": append_score},
     4: {"name": 'Execute Data control Job', "handler": run_job},
+    5: {"name": 'Move Job rejected Images', "handler": move_rejected},
+    6: {"name": 'Move All output to root folder', "handler": move_to_output},
+    7: {"name": 'Compress Rejected and Validated Images', "handler": compress},
+    8: {"name": 'Upload Images to S3', "handler": upload_files},
 }
 
 try:

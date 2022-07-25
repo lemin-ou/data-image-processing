@@ -298,6 +298,7 @@ private RunStat runStat = new RunStat();
 		globalMap.put(KEY_DB_DATASOURCES_RAW, new java.util.HashMap<String, javax.sql.DataSource>(dataSources));
 	}
 
+	LogCatcherUtils tLogCatcher_1 = new LogCatcherUtils();
 
 private final java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
 private final java.io.PrintStream errorMessagePS = new java.io.PrintStream(new java.io.BufferedOutputStream(baos));
@@ -393,7 +394,12 @@ private class TalendException extends Exception {
 			}
 
 			if(!(e instanceof TDieException)){
+				tLogCatcher_1.addMessage("Java Exception", currentComponent, 6, e.getClass().getName() + ":" + e.getMessage(), 1);
+				tLogCatcher_1Process(globalMap);
 			}
+			} catch (TalendException e) {
+				// do nothing
+			
 		} catch (Exception e) {
 			this.e.printStackTrace();
 		}
@@ -405,16 +411,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -423,16 +425,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_2_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -441,16 +439,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_3_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -459,16 +453,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_4_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -477,16 +467,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_5_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -495,16 +481,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_6_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -513,16 +495,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_7_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -531,16 +509,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_8_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -549,16 +523,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_9_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -567,16 +537,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_10_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -585,16 +551,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tUniqRow_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -603,16 +565,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJavaRow_11_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -621,16 +579,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tLogRow_12_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -639,16 +593,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tHashOutput_2_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tFileInputDelimited_1_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -657,16 +607,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tUnite_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -675,16 +621,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tFilterRow_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -693,16 +635,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tMap_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -711,16 +649,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tFileOutputExcel_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -729,16 +663,12 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tMap_2_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
-				
-				status = "failure";
 				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
@@ -747,8 +677,6 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
-				status = "failure";
-				
 					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
@@ -756,9 +684,25 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
+					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
+			}
+			
+			public void tDie_2_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
+				
+				end_Hash.put(errorComponent, System.currentTimeMillis());
+				
 				status = "failure";
 				
-					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
+					tDie_2_onSubJobError(exception, errorComponent, globalMap);
+			}
+			
+			public void tDie_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
+				
+				end_Hash.put(errorComponent, System.currentTimeMillis());
+				
+				status = "failure";
+				
+					tDie_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tJava_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
@@ -774,22 +718,81 @@ private class TalendException extends Exception {
 				
 				end_Hash.put(errorComponent, System.currentTimeMillis());
 				
+					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
+			}
+			
+			public void tLogCatcher_1_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
+				
+				end_Hash.put(errorComponent, System.currentTimeMillis());
+				
 				status = "failure";
 				
-					tHashInput_2_onSubJobError(exception, errorComponent, globalMap);
+					tLogCatcher_1_onSubJobError(exception, errorComponent, globalMap);
+			}
+			
+			public void tLogRow_16_error(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
+				
+				end_Hash.put(errorComponent, System.currentTimeMillis());
+				
+				status = "failure";
+				
+					tLogCatcher_1_onSubJobError(exception, errorComponent, globalMap);
 			}
 			
 			public void tFileInputDelimited_1_onSubJobError(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 
+resumeUtil.addLog("SYSTEM_LOG", "NODE:"+ errorComponent, "", Thread.currentThread().getId()+ "", "ERROR", "", exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception),"");
+
+				try {
+					
+						if(this.execStat){
+							runStat.updateStatOnConnection("OnSubjobError1", 0, "error");
+						}
+					
+					errorCode = null;
+					tDie_1Process(globalMap);
+					if (!"failure".equals(status)) {
+						status = "end";
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			public void tHashInput_2_onSubJobError(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
+
+resumeUtil.addLog("SYSTEM_LOG", "NODE:"+ errorComponent, "", Thread.currentThread().getId()+ "", "ERROR", "", exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception),"");
+
+				try {
+					
+						if(this.execStat){
+							runStat.updateStatOnConnection("OnSubjobError2", 0, "error");
+						}
+					
+					errorCode = null;
+					tDie_2Process(globalMap);
+					if (!"failure".equals(status)) {
+						status = "end";
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			public void tDie_2_onSubJobError(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
+
 resumeUtil.addLog("SYSTEM_LOG", "NODE:"+ errorComponent, "", Thread.currentThread().getId()+ "", "FATAL", "", exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception),"");
 
 			}
-			public void tHashInput_2_onSubJobError(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
+			public void tDie_1_onSubJobError(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 
 resumeUtil.addLog("SYSTEM_LOG", "NODE:"+ errorComponent, "", Thread.currentThread().getId()+ "", "FATAL", "", exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception),"");
 
 			}
 			public void tJava_1_onSubJobError(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
+
+resumeUtil.addLog("SYSTEM_LOG", "NODE:"+ errorComponent, "", Thread.currentThread().getId()+ "", "FATAL", "", exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception),"");
+
+			}
+			public void tLogCatcher_1_onSubJobError(Exception exception, String errorComponent, final java.util.Map<String, Object> globalMap) throws TalendException {
 
 resumeUtil.addLog("SYSTEM_LOG", "NODE:"+ errorComponent, "", Thread.currentThread().getId()+ "", "FATAL", "", exception.getMessage(), ResumeUtil.getExceptionStackTrace(exception),"");
 
@@ -14449,8 +14452,7 @@ int nb_line_tJavaRow_1 = 0;
 								,-1, false);
 						} catch(java.lang.Exception e) {
 							
-								
-								System.err.println(e.getMessage());
+								throw e;
 							
 						}
 					
@@ -14612,9 +14614,8 @@ int nb_line_tJavaRow_1 = 0;
 			    					} catch (java.lang.Exception e) {
 			        					whetherReject_tFileInputDelimited_1 = true;
 			        					
-			                					System.err.println(e.getMessage());
-			                					row1 = null;
-			                				
+			            					throw(e);
+			            				
 			    					}
 								
 
@@ -29591,6 +29592,432 @@ end_Hash.put("tFileOutputExcel_2", System.currentTimeMillis());
 	}
 	
 
+public void tDie_2Process(final java.util.Map<String, Object> globalMap) throws TalendException {
+	globalMap.put("tDie_2_SUBPROCESS_STATE", 0);
+
+ final boolean execStat = this.execStat;
+	
+		String iterateId = "";
+	
+	
+	String currentComponent = "";
+	java.util.Map<String, Object> resourceMap = new java.util.HashMap<String, Object>();
+
+	try {
+			// TDI-39566 avoid throwing an useless Exception
+			boolean resumeIt = true;
+			if (globalResumeTicket == false && resumeEntryMethodName != null) {
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
+				resumeIt = resumeEntryMethodName.equals(currentMethodName);
+			}
+			if (resumeIt || globalResumeTicket) { //start the resume
+				globalResumeTicket = true;
+
+
+
+
+
+	
+	/**
+	 * [tDie_2 begin ] start
+	 */
+
+	
+
+	
+		
+		ok_Hash.put("tDie_2", false);
+		start_Hash.put("tDie_2", System.currentTimeMillis());
+		
+	
+	currentComponent="tDie_2";
+
+	
+		int tos_count_tDie_2 = 0;
+		
+
+ 
+
+
+
+/**
+ * [tDie_2 begin ] stop
+ */
+	
+	/**
+	 * [tDie_2 main ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tDie_2";
+
+	
+
+	try {
+				tLogCatcher_1.addMessage("tDie", "tDie_2", 5, "Something went wrong in step 2", 4);
+				tLogCatcher_1Process(globalMap);
+				
+	globalMap.put("tDie_2_DIE_PRIORITY", 5);
+	System.err.println("Something went wrong in step 2");
+	
+	globalMap.put("tDie_2_DIE_MESSAGE", "Something went wrong in step 2");
+	globalMap.put("tDie_2_DIE_MESSAGES", "Something went wrong in step 2");
+	
+	} catch (Exception | Error e_tDie_2) {
+		logIgnoredError(String.format("tDie_2 - tDie failed to log message due to internal error: %s", e_tDie_2), e_tDie_2);
+	}
+	
+	currentComponent = "tDie_2";
+	status = "failure";
+        errorCode = new Integer(4);
+        globalMap.put("tDie_2_DIE_CODE", errorCode);        
+    
+	if(true){	
+	    throw new TDieException();
+	}
+
+ 
+
+
+	tos_count_tDie_2++;
+
+/**
+ * [tDie_2 main ] stop
+ */
+	
+	/**
+	 * [tDie_2 process_data_begin ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tDie_2";
+
+	
+
+ 
+
+
+
+/**
+ * [tDie_2 process_data_begin ] stop
+ */
+	
+	/**
+	 * [tDie_2 process_data_end ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tDie_2";
+
+	
+
+ 
+
+
+
+/**
+ * [tDie_2 process_data_end ] stop
+ */
+	
+	/**
+	 * [tDie_2 end ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tDie_2";
+
+	
+
+ 
+
+ok_Hash.put("tDie_2", true);
+end_Hash.put("tDie_2", System.currentTimeMillis());
+
+
+
+
+/**
+ * [tDie_2 end ] stop
+ */
+				}//end the resume
+
+				
+
+
+
+	
+			}catch(java.lang.Exception e){	
+				
+				TalendException te = new TalendException(e, currentComponent, globalMap);
+				
+				throw te;
+			}catch(java.lang.Error error){	
+				
+					runStat.stopThreadStat();
+				
+				throw error;
+			}finally{
+				
+				try{
+					
+	
+	/**
+	 * [tDie_2 finally ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tDie_2";
+
+	
+
+ 
+
+
+
+/**
+ * [tDie_2 finally ] stop
+ */
+				}catch(java.lang.Exception e){	
+					//ignore
+				}catch(java.lang.Error error){
+					//ignore
+				}
+				resourceMap = null;
+			}
+		
+
+		globalMap.put("tDie_2_SUBPROCESS_STATE", 1);
+	}
+	
+
+public void tDie_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
+	globalMap.put("tDie_1_SUBPROCESS_STATE", 0);
+
+ final boolean execStat = this.execStat;
+	
+		String iterateId = "";
+	
+	
+	String currentComponent = "";
+	java.util.Map<String, Object> resourceMap = new java.util.HashMap<String, Object>();
+
+	try {
+			// TDI-39566 avoid throwing an useless Exception
+			boolean resumeIt = true;
+			if (globalResumeTicket == false && resumeEntryMethodName != null) {
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
+				resumeIt = resumeEntryMethodName.equals(currentMethodName);
+			}
+			if (resumeIt || globalResumeTicket) { //start the resume
+				globalResumeTicket = true;
+
+
+
+
+
+	
+	/**
+	 * [tDie_1 begin ] start
+	 */
+
+	
+
+	
+		
+		ok_Hash.put("tDie_1", false);
+		start_Hash.put("tDie_1", System.currentTimeMillis());
+		
+	
+	currentComponent="tDie_1";
+
+	
+		int tos_count_tDie_1 = 0;
+		
+
+ 
+
+
+
+/**
+ * [tDie_1 begin ] stop
+ */
+	
+	/**
+	 * [tDie_1 main ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tDie_1";
+
+	
+
+	try {
+				tLogCatcher_1.addMessage("tDie", "tDie_1", 5, "Something went wrong in step 1", 4);
+				tLogCatcher_1Process(globalMap);
+				
+	globalMap.put("tDie_1_DIE_PRIORITY", 5);
+	System.err.println("Something went wrong in step 1");
+	
+	globalMap.put("tDie_1_DIE_MESSAGE", "Something went wrong in step 1");
+	globalMap.put("tDie_1_DIE_MESSAGES", "Something went wrong in step 1");
+	
+	} catch (Exception | Error e_tDie_1) {
+		logIgnoredError(String.format("tDie_1 - tDie failed to log message due to internal error: %s", e_tDie_1), e_tDie_1);
+	}
+	
+	currentComponent = "tDie_1";
+	status = "failure";
+        errorCode = new Integer(4);
+        globalMap.put("tDie_1_DIE_CODE", errorCode);        
+    
+	if(true){	
+	    throw new TDieException();
+	}
+
+ 
+
+
+	tos_count_tDie_1++;
+
+/**
+ * [tDie_1 main ] stop
+ */
+	
+	/**
+	 * [tDie_1 process_data_begin ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tDie_1";
+
+	
+
+ 
+
+
+
+/**
+ * [tDie_1 process_data_begin ] stop
+ */
+	
+	/**
+	 * [tDie_1 process_data_end ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tDie_1";
+
+	
+
+ 
+
+
+
+/**
+ * [tDie_1 process_data_end ] stop
+ */
+	
+	/**
+	 * [tDie_1 end ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tDie_1";
+
+	
+
+ 
+
+ok_Hash.put("tDie_1", true);
+end_Hash.put("tDie_1", System.currentTimeMillis());
+
+
+
+
+/**
+ * [tDie_1 end ] stop
+ */
+				}//end the resume
+
+				
+
+
+
+	
+			}catch(java.lang.Exception e){	
+				
+				TalendException te = new TalendException(e, currentComponent, globalMap);
+				
+				throw te;
+			}catch(java.lang.Error error){	
+				
+					runStat.stopThreadStat();
+				
+				throw error;
+			}finally{
+				
+				try{
+					
+	
+	/**
+	 * [tDie_1 finally ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tDie_1";
+
+	
+
+ 
+
+
+
+/**
+ * [tDie_1 finally ] stop
+ */
+				}catch(java.lang.Exception e){	
+					//ignore
+				}catch(java.lang.Error error){
+					//ignore
+				}
+				resourceMap = null;
+			}
+		
+
+		globalMap.put("tDie_1_SUBPROCESS_STATE", 1);
+	}
+	
+
 public void tJava_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
 	globalMap.put("tJava_1_SUBPROCESS_STATE", 0);
 
@@ -29792,6 +30219,927 @@ end_Hash.put("tJava_1", System.currentTimeMillis());
 		
 
 		globalMap.put("tJava_1_SUBPROCESS_STATE", 1);
+	}
+	
+
+
+public static class row36Struct implements routines.system.IPersistableRow<row36Struct> {
+    final static byte[] commonByteArrayLock_CNAM_PROJECT_cnam_bulk_data_processing = new byte[0];
+    static byte[] commonByteArray_CNAM_PROJECT_cnam_bulk_data_processing = new byte[0];
+
+	
+			    public java.util.Date moment;
+
+				public java.util.Date getMoment () {
+					return this.moment;
+				}
+				
+			    public String pid;
+
+				public String getPid () {
+					return this.pid;
+				}
+				
+			    public String root_pid;
+
+				public String getRoot_pid () {
+					return this.root_pid;
+				}
+				
+			    public String father_pid;
+
+				public String getFather_pid () {
+					return this.father_pid;
+				}
+				
+			    public String project;
+
+				public String getProject () {
+					return this.project;
+				}
+				
+			    public String job;
+
+				public String getJob () {
+					return this.job;
+				}
+				
+			    public String context;
+
+				public String getContext () {
+					return this.context;
+				}
+				
+			    public Integer priority;
+
+				public Integer getPriority () {
+					return this.priority;
+				}
+				
+			    public String type;
+
+				public String getType () {
+					return this.type;
+				}
+				
+			    public String origin;
+
+				public String getOrigin () {
+					return this.origin;
+				}
+				
+			    public String message;
+
+				public String getMessage () {
+					return this.message;
+				}
+				
+			    public Integer code;
+
+				public Integer getCode () {
+					return this.code;
+				}
+				
+
+
+
+	private java.util.Date readDate(ObjectInputStream dis) throws IOException{
+		java.util.Date dateReturn = null;
+        int length = 0;
+        length = dis.readByte();
+		if (length == -1) {
+			dateReturn = null;
+		} else {
+	    	dateReturn = new Date(dis.readLong());
+		}
+		return dateReturn;
+	}
+
+    private void writeDate(java.util.Date date1, ObjectOutputStream dos) throws IOException{
+		if(date1 == null) {
+            dos.writeByte(-1);
+		} else {
+			dos.writeByte(0);
+	    	dos.writeLong(date1.getTime());
+    	}
+    }
+
+	private String readString(ObjectInputStream dis) throws IOException{
+		String strReturn = null;
+		int length = 0;
+        length = dis.readInt();
+		if (length == -1) {
+			strReturn = null;
+		} else {
+			if(length > commonByteArray_CNAM_PROJECT_cnam_bulk_data_processing.length) {
+				if(length < 1024 && commonByteArray_CNAM_PROJECT_cnam_bulk_data_processing.length == 0) {
+   					commonByteArray_CNAM_PROJECT_cnam_bulk_data_processing = new byte[1024];
+				} else {
+   					commonByteArray_CNAM_PROJECT_cnam_bulk_data_processing = new byte[2 * length];
+   				}
+			}
+			dis.readFully(commonByteArray_CNAM_PROJECT_cnam_bulk_data_processing, 0, length);
+			strReturn = new String(commonByteArray_CNAM_PROJECT_cnam_bulk_data_processing, 0, length, utf8Charset);
+		}
+		return strReturn;
+	}
+
+    private void writeString(String str, ObjectOutputStream dos) throws IOException{
+		if(str == null) {
+            dos.writeInt(-1);
+		} else {
+            byte[] byteArray = str.getBytes(utf8Charset);
+	    	dos.writeInt(byteArray.length);
+			dos.write(byteArray);
+    	}
+    }
+	private Integer readInteger(ObjectInputStream dis) throws IOException{
+		Integer intReturn;
+        int length = 0;
+        length = dis.readByte();
+		if (length == -1) {
+			intReturn = null;
+		} else {
+	    	intReturn = dis.readInt();
+		}
+		return intReturn;
+	}
+
+	private void writeInteger(Integer intNum, ObjectOutputStream dos) throws IOException{
+		if(intNum == null) {
+            dos.writeByte(-1);
+		} else {
+			dos.writeByte(0);
+	    	dos.writeInt(intNum);
+    	}
+	}
+
+    public void readData(ObjectInputStream dis) {
+
+		synchronized(commonByteArrayLock_CNAM_PROJECT_cnam_bulk_data_processing) {
+
+        	try {
+
+        		int length = 0;
+		
+					this.moment = readDate(dis);
+					
+					this.pid = readString(dis);
+					
+					this.root_pid = readString(dis);
+					
+					this.father_pid = readString(dis);
+					
+					this.project = readString(dis);
+					
+					this.job = readString(dis);
+					
+					this.context = readString(dis);
+					
+						this.priority = readInteger(dis);
+					
+					this.type = readString(dis);
+					
+					this.origin = readString(dis);
+					
+					this.message = readString(dis);
+					
+						this.code = readInteger(dis);
+					
+        	} catch (IOException e) {
+	            throw new RuntimeException(e);
+
+		
+
+        }
+
+		
+
+      }
+
+
+    }
+
+    public void writeData(ObjectOutputStream dos) {
+        try {
+
+		
+					// java.util.Date
+				
+						writeDate(this.moment,dos);
+					
+					// String
+				
+						writeString(this.pid,dos);
+					
+					// String
+				
+						writeString(this.root_pid,dos);
+					
+					// String
+				
+						writeString(this.father_pid,dos);
+					
+					// String
+				
+						writeString(this.project,dos);
+					
+					// String
+				
+						writeString(this.job,dos);
+					
+					// String
+				
+						writeString(this.context,dos);
+					
+					// Integer
+				
+						writeInteger(this.priority,dos);
+					
+					// String
+				
+						writeString(this.type,dos);
+					
+					// String
+				
+						writeString(this.origin,dos);
+					
+					// String
+				
+						writeString(this.message,dos);
+					
+					// Integer
+				
+						writeInteger(this.code,dos);
+					
+        	} catch (IOException e) {
+	            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+    public String toString() {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(super.toString());
+		sb.append("[");
+		sb.append("moment="+String.valueOf(moment));
+		sb.append(",pid="+pid);
+		sb.append(",root_pid="+root_pid);
+		sb.append(",father_pid="+father_pid);
+		sb.append(",project="+project);
+		sb.append(",job="+job);
+		sb.append(",context="+context);
+		sb.append(",priority="+String.valueOf(priority));
+		sb.append(",type="+type);
+		sb.append(",origin="+origin);
+		sb.append(",message="+message);
+		sb.append(",code="+String.valueOf(code));
+	    sb.append("]");
+
+	    return sb.toString();
+    }
+
+    /**
+     * Compare keys
+     */
+    public int compareTo(row36Struct other) {
+
+		int returnValue = -1;
+		
+	    return returnValue;
+    }
+
+
+    private int checkNullsAndCompare(Object object1, Object object2) {
+        int returnValue = 0;
+		if (object1 instanceof Comparable && object2 instanceof Comparable) {
+            returnValue = ((Comparable) object1).compareTo(object2);
+        } else if (object1 != null && object2 != null) {
+            returnValue = compareStrings(object1.toString(), object2.toString());
+        } else if (object1 == null && object2 != null) {
+            returnValue = 1;
+        } else if (object1 != null && object2 == null) {
+            returnValue = -1;
+        } else {
+            returnValue = 0;
+        }
+
+        return returnValue;
+    }
+
+    private int compareStrings(String string1, String string2) {
+        return string1.compareTo(string2);
+    }
+
+
+}
+public void tLogCatcher_1Process(final java.util.Map<String, Object> globalMap) throws TalendException {
+	globalMap.put("tLogCatcher_1_SUBPROCESS_STATE", 0);
+
+ final boolean execStat = this.execStat;
+	
+		String iterateId = "";
+	
+	
+	String currentComponent = "";
+	java.util.Map<String, Object> resourceMap = new java.util.HashMap<String, Object>();
+
+	try {
+			// TDI-39566 avoid throwing an useless Exception
+			boolean resumeIt = true;
+			if (globalResumeTicket == false && resumeEntryMethodName != null) {
+				String currentMethodName = new java.lang.Exception().getStackTrace()[0].getMethodName();
+				resumeIt = resumeEntryMethodName.equals(currentMethodName);
+			}
+			if (resumeIt || globalResumeTicket) { //start the resume
+				globalResumeTicket = true;
+
+
+
+		row36Struct row36 = new row36Struct();
+
+
+
+
+	
+	/**
+	 * [tLogRow_16 begin ] start
+	 */
+
+	
+
+	
+		
+		ok_Hash.put("tLogRow_16", false);
+		start_Hash.put("tLogRow_16", System.currentTimeMillis());
+		
+	
+	currentComponent="tLogRow_16";
+
+	
+					if(execStat) {
+						runStat.updateStatOnConnection(resourceMap,iterateId,0,0,"row36");
+					}
+				
+		int tos_count_tLogRow_16 = 0;
+		
+
+	///////////////////////
+	
+		final String OUTPUT_FIELD_SEPARATOR_tLogRow_16 = "|";
+		java.io.PrintStream consoleOut_tLogRow_16 = null;	
+
+ 		StringBuilder strBuffer_tLogRow_16 = null;
+		int nb_line_tLogRow_16 = 0;
+///////////////////////    			
+
+
+
+ 
+
+
+
+/**
+ * [tLogRow_16 begin ] stop
+ */
+
+
+
+	
+	/**
+	 * [tLogCatcher_1 begin ] start
+	 */
+
+	
+
+	
+		
+		ok_Hash.put("tLogCatcher_1", false);
+		start_Hash.put("tLogCatcher_1", System.currentTimeMillis());
+		
+	
+	currentComponent="tLogCatcher_1";
+
+	
+		int tos_count_tLogCatcher_1 = 0;
+		
+
+try {
+	for (LogCatcherUtils.LogCatcherMessage lcm : tLogCatcher_1.getMessages()) {
+		row36.type = lcm.getType();
+		row36.origin = (lcm.getOrigin()==null || lcm.getOrigin().length()<1 ? null : lcm.getOrigin());
+		row36.priority = lcm.getPriority();
+		row36.message = lcm.getMessage();
+		row36.code = lcm.getCode();
+		
+		row36.moment = java.util.Calendar.getInstance().getTime();
+	
+    	row36.pid = pid;
+		row36.root_pid = rootPid;
+		row36.father_pid = fatherPid;
+	
+    	row36.project = projectName;
+    	row36.job = jobName;
+    	row36.context = contextStr;
+    		
+ 
+
+
+
+/**
+ * [tLogCatcher_1 begin ] stop
+ */
+	
+	/**
+	 * [tLogCatcher_1 main ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tLogCatcher_1";
+
+	
+
+ 
+
+
+	tos_count_tLogCatcher_1++;
+
+/**
+ * [tLogCatcher_1 main ] stop
+ */
+	
+	/**
+	 * [tLogCatcher_1 process_data_begin ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tLogCatcher_1";
+
+	
+
+ 
+
+
+
+/**
+ * [tLogCatcher_1 process_data_begin ] stop
+ */
+
+	
+	/**
+	 * [tLogRow_16 main ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tLogRow_16";
+
+	
+					if(execStat){
+						runStat.updateStatOnConnection(iterateId,1,1,"row36");
+					}
+					
+///////////////////////		
+						
+
+
+
+				strBuffer_tLogRow_16 = new StringBuilder();
+
+
+
+
+   				
+	    		if(row36.moment != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+								FormatterUtils.format_Date(row36.moment, "yyyy-MM-dd HH:mm:ss")				
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.pid != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.pid)							
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.root_pid != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.root_pid)							
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.father_pid != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.father_pid)							
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.project != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.project)							
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.job != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.job)							
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.context != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.context)							
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.priority != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.priority)							
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.type != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.type)							
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.origin != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.origin)							
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.message != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.message)							
+				);
+
+
+							
+	    		} //  			
+
+    			strBuffer_tLogRow_16.append("|");
+    			
+
+
+   				
+	    		if(row36.code != null) { //              
+                    							
+       
+				strBuffer_tLogRow_16.append(
+				                String.valueOf(row36.code)							
+				);
+
+
+							
+	    		} //  			
+ 
+
+                    if (globalMap.get("tLogRow_CONSOLE")!=null)
+                    {
+                    	consoleOut_tLogRow_16 = (java.io.PrintStream) globalMap.get("tLogRow_CONSOLE");
+                    }
+                    else
+                    {
+                    	consoleOut_tLogRow_16 = new java.io.PrintStream(new java.io.BufferedOutputStream(System.out));
+                    	globalMap.put("tLogRow_CONSOLE",consoleOut_tLogRow_16);
+                    }
+                    consoleOut_tLogRow_16.println(strBuffer_tLogRow_16.toString());
+                    consoleOut_tLogRow_16.flush();
+                    nb_line_tLogRow_16++;
+//////
+
+//////                    
+                    
+///////////////////////    			
+
+ 
+
+
+	tos_count_tLogRow_16++;
+
+/**
+ * [tLogRow_16 main ] stop
+ */
+	
+	/**
+	 * [tLogRow_16 process_data_begin ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tLogRow_16";
+
+	
+
+ 
+
+
+
+/**
+ * [tLogRow_16 process_data_begin ] stop
+ */
+	
+	/**
+	 * [tLogRow_16 process_data_end ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tLogRow_16";
+
+	
+
+ 
+
+
+
+/**
+ * [tLogRow_16 process_data_end ] stop
+ */
+
+
+
+	
+	/**
+	 * [tLogCatcher_1 process_data_end ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tLogCatcher_1";
+
+	
+
+ 
+
+
+
+/**
+ * [tLogCatcher_1 process_data_end ] stop
+ */
+	
+	/**
+	 * [tLogCatcher_1 end ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tLogCatcher_1";
+
+	
+	}
+} catch (Exception e_tLogCatcher_1) {
+	logIgnoredError(String.format("tLogCatcher_1 - tLogCatcher failed to process log message(s) due to internal error: %s", e_tLogCatcher_1), e_tLogCatcher_1);
+}
+
+ 
+
+ok_Hash.put("tLogCatcher_1", true);
+end_Hash.put("tLogCatcher_1", System.currentTimeMillis());
+
+
+
+
+/**
+ * [tLogCatcher_1 end ] stop
+ */
+
+	
+	/**
+	 * [tLogRow_16 end ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tLogRow_16";
+
+	
+
+
+//////
+//////
+globalMap.put("tLogRow_16_NB_LINE",nb_line_tLogRow_16);
+
+///////////////////////    			
+
+				if(execStat){
+			  		runStat.updateStat(resourceMap,iterateId,2,0,"row36");
+			  	}
+			  	
+ 
+
+ok_Hash.put("tLogRow_16", true);
+end_Hash.put("tLogRow_16", System.currentTimeMillis());
+
+
+
+
+/**
+ * [tLogRow_16 end ] stop
+ */
+
+
+
+				}//end the resume
+
+				
+
+
+
+	
+			}catch(java.lang.Exception e){	
+				
+				TalendException te = new TalendException(e, currentComponent, globalMap);
+				
+				throw te;
+			}catch(java.lang.Error error){	
+				
+					runStat.stopThreadStat();
+				
+				throw error;
+			}finally{
+				
+				try{
+					
+	
+	/**
+	 * [tLogCatcher_1 finally ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tLogCatcher_1";
+
+	
+
+ 
+
+
+
+/**
+ * [tLogCatcher_1 finally ] stop
+ */
+
+	
+	/**
+	 * [tLogRow_16 finally ] start
+	 */
+
+	
+
+	
+	
+	currentComponent="tLogRow_16";
+
+	
+
+ 
+
+
+
+/**
+ * [tLogRow_16 finally ] stop
+ */
+
+
+
+				}catch(java.lang.Exception e){	
+					//ignore
+				}catch(java.lang.Error error){
+					//ignore
+				}
+				resourceMap = null;
+			}
+		
+
+		globalMap.put("tLogCatcher_1_SUBPROCESS_STATE", 1);
 	}
 	
     public String resuming_logs_dir_path = null;
@@ -30245,6 +31593,6 @@ if (execStat) {
     ResumeUtil resumeUtil = null;
 }
 /************************************************************************************************
- *     699899 characters generated by Talend Open Studio for Data Integration 
- *     on the July 22, 2022 1:03:11 PM GMT
+ *     724829 characters generated by Talend Open Studio for Data Integration 
+ *     on the July 25, 2022 11:44:43 AM GMT
  ************************************************************************************************/

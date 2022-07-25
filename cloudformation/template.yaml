@@ -328,8 +328,10 @@ Resources:
                           git clone https://${GithubPersonalAccessToken}@github.com/infinidatamr/${GithubRepoName}.git
                           echo "cloning done"
                           cd ${GithubRepoName}
+                          echo 'set deployment bucket name ....'
+                          echo "DESTINATION_BUCKET_NAME= ${DeploymentBucket}" >> .env
                           echo 'set environment to prod ...'
-                          echo "ENV = prod" >> .env
+                          sed -i -r 's/localhost/prod/g'  .env
                           echo "creating necessary directories"
                           mkdir -p data/extracted
                           echo "installing dependencies ...."
@@ -391,6 +393,7 @@ Resources:
           - name: DownloadExtractDataFromS3
             action: 'aws:runCommand'
             onFailure: 'step:getRuleFullName'
+            timeoutSeconds: 18000
             inputs:
               DocumentName: AWS-RunShellScript
               Parameters:
@@ -418,12 +421,92 @@ Resources:
             nextStep: ProcessImagesInEachSubBatch
           - name: ProcessImagesInEachSubBatch
             action: 'aws:runCommand'
-            onFailure: Continue
+            onFailure: 'step:getRuleFullName'
+            timeoutSeconds: 172800
             inputs:
               DocumentName: AWS-RunShellScript
               Parameters:
                 commands:
                 - !Sub "cd /root/${GithubRepoName} && python3 main.py 3"
+              CloudWatchOutputConfig:
+                CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+                CloudWatchOutputEnabled: true
+              InstanceIds:
+                - "{{ getInstanceIdFromTheTag.InstanceId }}"
+            nextStep: ExecuteDataControlJob
+          - name: ExecuteDataControlJob
+            action: 'aws:runCommand'
+            onFailure: 'step:getRuleFullName'
+            timeoutSeconds: 7200
+            inputs:
+              DocumentName: AWS-RunShellScript
+              Parameters:
+                commands:
+                - !Sub "cd /root/${GithubRepoName} && python3 main.py 4"
+              CloudWatchOutputConfig:
+                CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+                CloudWatchOutputEnabled: true
+              InstanceIds:
+                - "{{ getInstanceIdFromTheTag.InstanceId }}"
+            nextStep: MoveJobRejectedImages
+          
+          - name: MoveJobRejectedImages
+            action: 'aws:runCommand'
+            onFailure: 'step:getRuleFullName'
+            timeoutSeconds: 18000
+            inputs:
+              DocumentName: AWS-RunShellScript
+              Parameters:
+                commands:
+                - !Sub "cd /root/${GithubRepoName} && python3 main.py 5"
+              CloudWatchOutputConfig:
+                CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+                CloudWatchOutputEnabled: true
+              InstanceIds:
+                - "{{ getInstanceIdFromTheTag.InstanceId }}"
+            nextStep: MoveAllOutputToRootFolder
+          
+          - name: MoveAllOutputToRootFolder
+            action: 'aws:runCommand'
+            onFailure: 'step:getRuleFullName'
+            timeoutSeconds: 18000
+            inputs:
+              DocumentName: AWS-RunShellScript
+              Parameters:
+                commands:
+                - !Sub "cd /root/${GithubRepoName} && python3 main.py 6"
+              CloudWatchOutputConfig:
+                CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+                CloudWatchOutputEnabled: true
+              InstanceIds:
+                - "{{ getInstanceIdFromTheTag.InstanceId }}"
+            nextStep: CompressRejectedAndValidatedImages
+          
+          - name: CompressRejectedAndValidatedImages
+            action: 'aws:runCommand'
+            onFailure: 'step:getRuleFullName'
+            timeoutSeconds: 18000
+            inputs:
+              DocumentName: AWS-RunShellScript
+              Parameters:
+                commands:
+                - !Sub "cd /root/${GithubRepoName} && python3 main.py 7"
+              CloudWatchOutputConfig:
+                CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
+                CloudWatchOutputEnabled: true
+              InstanceIds:
+                - "{{ getInstanceIdFromTheTag.InstanceId }}"
+            nextStep: UploadImagesToS3
+          
+          - name: UploadImagesToS3
+            action: 'aws:runCommand'
+            onFailure: 'step:getRuleFullName'
+            timeoutSeconds: 18000
+            inputs:
+              DocumentName: AWS-RunShellScript
+              Parameters:
+                commands:
+                - !Sub "cd /root/${GithubRepoName} && python3 main.py 8"
               CloudWatchOutputConfig:
                 CloudWatchLogGroupName: ProcessImagesCloudWatchLogGroup
                 CloudWatchOutputEnabled: true
