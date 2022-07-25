@@ -151,7 +151,7 @@ def convert_to_csv():
 
         logger.info("reading excel file.......")
 
-        read_file = pd.read_excel(f'{excelpath}', dtype=str, header=6)
+        read_file = pd.read_excel(f'{excelpath}', dtype=str, header=0) # TODO: header should be returned to 6
 
         logger.info("excel file loaded to dataframe .......")
 
