@@ -72,7 +72,12 @@ def put_data(roots):
             with open(fileLocation, "rb") as file:
                 s3.upload_fileobj(file, bucketName, path.join(
                     dir, Path(fileLocation).name))
-
+        # put csv file with score
+        logger.info("uploading processed csv file with score ")
+        processedFile = config.get("csvpath")
+        with open(processedFile, "rb") as f:
+            s3.upload_fileobj(f, bucketName, path.join(
+                dir, Path(processedFile).name))
     except Exception as e:
         logger.error("error putting data to s3 -> %s " % e)
         raise e
@@ -151,7 +156,8 @@ def convert_to_csv():
 
         logger.info("reading excel file.......")
 
-        read_file = pd.read_excel(f'{excelpath}', dtype=str, header=0) # TODO: header should be returned to 6
+        # TODO: header should be returned to 6
+        read_file = pd.read_excel(f'{excelpath}', dtype=str, header=0)
 
         logger.info("excel file loaded to dataframe .......")
 
@@ -235,7 +241,7 @@ def move_image_to_root(root, dest):
                 rmtree(dirPath)  # remove directory after it has been emptied
             elif path.isfile(dirPath) and not path.exists(path.join(dest, dirPath.name)):
                 logger.info("moving %s to %s " % (dirPath, dest))
-                move(dirPath, dest)
+                move(dirPath.absolute().as_posix(), dest)
     except Exception as e:
         logger.error("Error while moving to root -> %s " % e)
         raise e

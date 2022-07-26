@@ -297,6 +297,7 @@ Resources:
               yum update -y
               yum upgrade -y
               yum install libXext libSM libXrender mesa-libGL.x86_64 git -y
+              yum install java-1.8.0-openjdk -y
               yum groupinstall 'Development Tools' -y 
               wget https://www.rarlab.com/rar/rarlinux-x64-6.0.2.tar.gz
               tar -zxvf rarlinux-x64-6.0.2.tar.gz
@@ -329,7 +330,7 @@ Resources:
                           echo "cloning done"
                           cd ${GithubRepoName}
                           echo 'set deployment bucket name ....'
-                          echo "DESTINATION_BUCKET_NAME= ${DeploymentBucket}" >> .env
+                          echo -e "\nDESTINATION_BUCKET_NAME= ${DeploymentBucket}\n" >> .env
                           echo 'set environment to prod ...'
                           sed -i -r 's/localhost/prod/g'  .env
                           echo "creating necessary directories"
