@@ -76,8 +76,7 @@ def put_data(roots):
         logger.info("uploading processed csv file with score ")
         processedFile = config.get("csvpath")
         with open(processedFile, "rb") as f:
-            s3.upload_fileobj(f, bucketName, path.join(
-                dir, Path(processedFile).name))
+            s3.upload_fileobj(f, bucketName, Path(processedFile).name)
     except Exception as e:
         logger.error("error putting data to s3 -> %s " % e)
         raise e
@@ -157,7 +156,7 @@ def convert_to_csv():
         logger.info("reading excel file.......")
 
         # TODO: header should be returned to 6
-        read_file = pd.read_excel(f'{excelpath}', dtype=str, header=0)
+        read_file = pd.read_excel(f'{excelpath}', dtype=str, header=6)
 
         logger.info("excel file loaded to dataframe .......")
 
