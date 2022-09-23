@@ -1,3 +1,4 @@
+from email.mime import image
 from os import path
 import numpy as np
 import cv2
@@ -141,6 +142,10 @@ def save(location, image, parent):
     save image to a specific location
     """
     extension = location.split(".").pop()  # get the extension
+    # Convert BGR OpenCV image into RGB to match PIL's channel ordering
+    RGBimage = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    #  Convert OpenCV Numpy array onto PIL Image
+    PILimage = Image.fromarray(RGBimage)
     if extension.lower() == 'gif':
         fileFullPath = Path(location)
         # parentPath = Path(parent)
@@ -152,7 +157,10 @@ def save(location, image, parent):
         old_path = '{}.JPG'.format(path.join(fileFullPath), ".".join(name))
         logger.info(
             'gif2jpg: save the gif file to this new path -> %s ' % old_path)
-        cv2.imwrite(filename=old_path,  img=image)
+        # Write with PIL
+        # cv2.imwrite(filename=old_path,  img=image)
+        PILimage.save(old_path, dpi=(300, 300))
         move(old_path, location)
     else:
-        cv2.imwrite(filename=location,  img=image)
+        # cv2.imwrite(filename=location,  img=image, )
+        PILimage.save(location, dpi=(300, 300))

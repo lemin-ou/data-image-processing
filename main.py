@@ -128,7 +128,7 @@ def append_score():
                 impath = path.join(root, row["Photo"].strip("/"))
                 (final, score, image_path) = imageprocessor.apply_processors(
                     impath, root)
-                row["Score"] = score
+                row["Score"] = score # TODO: commenting this mean no Score column will be added to the csv output file
                 writer.writerow(row)
                 check_score((final, score, image_path, root))
             out_file.close()

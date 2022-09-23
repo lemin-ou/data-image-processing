@@ -59,7 +59,7 @@ def get_root(root_path=__file__):
     isNotLocal = getenv("ENV") != 'localhost'
     config = load_config()
     file_dir = path.dirname(path.abspath(root_path))
-    batchesPath = "{}/test_ec2".format(path.join(file_dir, '..'))
+    batchesPath = "{}/sample_data".format(path.join(file_dir, '..'))
     localRoot = batchesPath.replace("\\ ", " ")
     return config.get("imagespath") if isNotLocal else localRoot
 

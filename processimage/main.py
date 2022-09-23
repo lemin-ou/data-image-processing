@@ -15,11 +15,10 @@ from logs import logger
 
 
 width = 177
-height = 224
+height = 236
 scale = 3
 to_generate = 3
-processors = [up_scale, resize, brightness,
-              sharpness, measure_quality,  denoising]
+processors = [resize]
 
 
 def apply_processors(image, parent):
@@ -33,7 +32,8 @@ def apply_processors(image, parent):
             tmp = cv2.imread(image_path)
             for processor in processors:
                 tmp = processor(tmp, width, height, scale)
-            final, score = tmp
+   
+            final, score = tmp if type(image) == tuple else (tmp, 10) # when no score is provided give a default one
             return (final, floor(score), old_path)
         except Exception as e:
             logger.info(

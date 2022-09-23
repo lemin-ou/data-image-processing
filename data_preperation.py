@@ -156,7 +156,7 @@ def convert_to_csv():
         logger.info("reading excel file.......")
 
         # TODO: header should be returned to 6
-        read_file = pd.read_excel(f'{excelpath}', dtype=str, header=6)
+        read_file = pd.read_excel(f'{excelpath}', dtype=str, header=6, na_filter=False)
 
         logger.info("excel file loaded to dataframe .......")
 
@@ -199,6 +199,9 @@ def move_rejected_files(root):
     config = load_config()
     try:
         file = config.get("rejectcsvpath")
+        if not path.exists(file):
+            logger.info("No rejected entries found.")
+            return
         logger.info("reading csv file....... : %s " % file)
         read_file = pd.read_csv(
             f'{file}', dtype=str, header=0, sep='@').iloc[:600]

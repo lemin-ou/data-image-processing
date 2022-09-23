@@ -394,10 +394,10 @@ Resources:
           - name: DownloadExtractDataFromS3
             action: 'aws:runCommand'
             onFailure: 'step:getRuleFullName'
-            timeoutSeconds: 18000
             inputs:
               DocumentName: AWS-RunShellScript
               Parameters:
+                executionTimeout: '172800'
                 commands:
                 - !Sub "cd /root/${GithubRepoName} && python3 main.py 1"
               CloudWatchOutputConfig:
@@ -423,10 +423,10 @@ Resources:
           - name: ProcessImagesInEachSubBatch
             action: 'aws:runCommand'
             onFailure: 'step:getRuleFullName'
-            timeoutSeconds: 172800
             inputs:
               DocumentName: AWS-RunShellScript
               Parameters:
+                executionTimeout: '172800'
                 commands:
                 - !Sub "cd /root/${GithubRepoName} && python3 main.py 3"
               CloudWatchOutputConfig:
@@ -438,7 +438,6 @@ Resources:
           - name: ExecuteDataControlJob
             action: 'aws:runCommand'
             onFailure: 'step:getRuleFullName'
-            timeoutSeconds: 7200
             inputs:
               DocumentName: AWS-RunShellScript
               Parameters:
@@ -454,10 +453,10 @@ Resources:
           - name: MoveJobRejectedImages
             action: 'aws:runCommand'
             onFailure: 'step:getRuleFullName'
-            timeoutSeconds: 18000
             inputs:
               DocumentName: AWS-RunShellScript
               Parameters:
+                executionTimeout: '18000'
                 commands:
                 - !Sub "cd /root/${GithubRepoName} && python3 main.py 5"
               CloudWatchOutputConfig:
@@ -470,10 +469,10 @@ Resources:
           - name: MoveAllOutputToRootFolder
             action: 'aws:runCommand'
             onFailure: 'step:getRuleFullName'
-            timeoutSeconds: 18000
             inputs:
               DocumentName: AWS-RunShellScript
               Parameters:
+                executionTimeout: '18000'
                 commands:
                 - !Sub "cd /root/${GithubRepoName} && python3 main.py 6"
               CloudWatchOutputConfig:
@@ -486,10 +485,10 @@ Resources:
           - name: CompressRejectedAndValidatedImages
             action: 'aws:runCommand'
             onFailure: 'step:getRuleFullName'
-            timeoutSeconds: 18000
             inputs:
               DocumentName: AWS-RunShellScript
               Parameters:
+                executionTimeout: '172800'
                 commands:
                 - !Sub "cd /root/${GithubRepoName} && python3 main.py 7"
               CloudWatchOutputConfig:
@@ -502,10 +501,10 @@ Resources:
           - name: UploadImagesToS3
             action: 'aws:runCommand'
             onFailure: 'step:getRuleFullName'
-            timeoutSeconds: 18000
             inputs:
               DocumentName: AWS-RunShellScript
               Parameters:
+                executionTimeout: '18000'
                 commands:
                 - !Sub "cd /root/${GithubRepoName} && python3 main.py 8"
               CloudWatchOutputConfig:
