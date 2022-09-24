@@ -359,6 +359,9 @@ Resources:
                 - Name: 'tag:Purpose'
                   Values: 
                   - ImageProcessor
+                - Name: 'instance-state-name'
+                  Values:
+                  - running
             outputs:
               - Name: InstanceId
                 Selector: '$.Reservations[0].Instances[0].InstanceId'
