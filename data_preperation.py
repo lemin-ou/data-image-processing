@@ -50,7 +50,7 @@ def get_data():
             remove(Path(path.join("data", fileName)).absolute().as_posix())
         logger.info("write data file path .....")
         extractedDir = dataPath.joinpath(
-            Path(listdir(dataPath)[0])) if isNotLocal else Path(get_root())
+            Path(list(filter(lambda x: not x.startswith("."), listdir(dataPath)))[0])) if isNotLocal else Path(get_root())
         return generate_config(extractedDir)
     except Exception as e:
         logger.error("error fetching data -> %s " % e)
@@ -156,7 +156,8 @@ def convert_to_csv():
         logger.info("reading excel file.......")
 
         # TODO: header should be returned to 6
-        read_file = pd.read_excel(f'{excelpath}', dtype=str, header=6, na_filter=False)
+        read_file = pd.read_excel(
+            f'{excelpath}', dtype=str, header=6, na_filter=False)
 
         logger.info("excel file loaded to dataframe .......")
 
